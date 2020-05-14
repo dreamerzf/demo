@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zf.demo.generator.dao.GeneratorDao">
+    <resultMap id="generator" type="com.zf.demo.generator.dao.entity.TableEntity">
+        <result property="tableName" column="table_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="tableComment" column="table_comment" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="columnName" column="column_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="columnComment" column="column_comment" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="dataType" column="data_type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="columnKey" column="column_key" javaType="java.lang.String" jdbcType="VARCHAR"/>
+
+    </resultMap>
+    <select id="getTables" resultMap="generator">
+        SELECT table_name,table_comment FROM information_schema.tables WHERE table_schema = "mydb"
+    </select>
+    <select id="getAllColumns" resultMap="generator">
+        SELECT
+            TABLE_NAME,
+            COLUMN_NAME,
+            DATA_TYPE,
+            COLUMN_KEY,
+            COLUMN_COMMENT
+        FROM
+            information_schema.`COLUMNS`
+        WHERE
+            TABLE_SCHEMA = 'mydb'
+            and table_name = #{generator.tableName,jdbcType=VARCHAR}
+        ORDER BY
+            ORDINAL_POSITION
+    </select>
+</mapper>

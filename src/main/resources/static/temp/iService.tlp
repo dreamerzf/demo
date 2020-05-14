@@ -1,0 +1,30 @@
+package com.zf.{ProjectName}.{ModuleName}.service;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import com.zf.{ProjectName}.{ModuleName}.service.vo.{EntityName}VO;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
+public interface I{EntityName}Service {
+
+    public ModelAndView page();
+
+    public IPage<{EntityName}VO> find{EntityName}s(Page<{EntityName}VO> page,{EntityName}VO {LowercaseEntityName}VO);
+
+    public int insert(@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO,HttpServletRequest request);
+
+    public int delete(@RequestBody List<{EntityName}VO> {LowercaseEntityName}List);
+
+    public int update(@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO);
+
+    public IPage<{EntityName}VO> findBySearchText(Page<{EntityName}VO> page,@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO);
+
+    public {EntityName}VO get{EntityName}(@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO);
+
+}

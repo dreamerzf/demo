@@ -1,0 +1,73 @@
+package com.zf.{ProjectName}.{ModuleName}.logic;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zf.{ProjectName}.{ModuleName}.dao.{EntityName}Dao;
+import com.zf.{ProjectName}.{ModuleName}.dao.entity.{EntityName}Entity;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Create by zengfei
+ * Date {NowDate}
+ */
+@Component
+public class {EntityName}AL {
+    @Autowired
+    private {EntityName}Dao {LowercaseEntityName}Dao;
+
+    /**
+     *分页查询
+     *@param page
+     *@param entity
+     *return
+     */
+    public List<{EntityName}Entity> find{EntityName}s(Page<?> page,{EntityName}Entity entity){
+        List<{EntityName}Entity> list={LowercaseEntityName}Dao.find{EntityName}s(page,entity);
+        return list;
+    }
+    /**
+     *删除
+     *@param entity
+     *return
+     */
+    public int delete({EntityName}Entity entity){
+        return {LowercaseEntityName}Dao.delete(entity);
+    }
+    /**
+     *修改
+     *@param entity
+     *return
+     */
+    public int update({EntityName}Entity entity){
+        return {LowercaseEntityName}Dao.update(entity);
+    }
+    /**
+     *插入
+     *@param entity
+     *return
+     */
+    public int insert({EntityName}Entity entity){
+        return {LowercaseEntityName}Dao.insert(entity);
+    }
+
+    /**
+     *获取
+     *@param entity
+     *return
+     */
+    public List<{EntityName}Entity> findBySearchText(Page<?> page ,{EntityName}Entity entity){
+        return {LowercaseEntityName}Dao.findBySearchText(entity);
+    }
+    /**
+     *获取
+     *@param entity
+     *return
+     */
+    public {EntityName}Entity get{EntityName}({EntityName}Entity entity){
+        return {LowercaseEntityName}Dao.get{EntityName}(entity);
+    }
+}

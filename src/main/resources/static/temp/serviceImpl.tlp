@@ -1,0 +1,130 @@
+package com.zf.{ProjectName}.{ModuleName}.service.impl;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import org.springframework.transaction.annotation.Transactional;
+import com.zf.{ProjectName}.{ModuleName}.dao.entity.{EntityName}Entity;
+import com.zf.{ProjectName}.{ModuleName}.logic.{EntityName}AL;
+import com.zf.{ProjectName}.{ModuleName}.service.I{EntityName}Service;
+import com.zf.{ProjectName}.{ModuleName}.service.vo.{EntityName}VO;
+import com.zf.{ProjectName}.utils.CastEnUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.servlet.ModelAndView;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ *
+ *@author
+ *Service实现类
+ */
+@RestController
+@RequestMapping(value="/{ModuleName}")
+public class {EntityName}ServiceImpl implements I{EntityName}Service{
+    @Autowired
+    private {EntityName}AL {LowercaseEntityName}AL;
+
+    @Override
+    @RequestMapping(value = "/{LowercaseEntityName}Index")
+    public ModelAndView page() {
+        return new ModelAndView("{ModuleName}/{EntityName}Index");
+    }
+    /**
+     *
+     *查询
+     */
+    @Override
+    @RequestMapping(value="/find{EntityName}s")
+    public IPage<{EntityName}VO> find{EntityName}s(Page<{EntityName}VO> page,{EntityName}VO {LowercaseEntityName}VO){
+        //VO转换成Entity
+        {EntityName}Entity {LowercaseEntityName}Entity = CastEnUtil.convertPojo({LowercaseEntityName}VO,{EntityName}Entity.class);
+        //分页查询，
+        List<{EntityName}Entity> {LowercaseEntityName}List={LowercaseEntityName}AL.find{EntityName}s(page,{LowercaseEntityName}Entity);
+        if(!CollectionUtils.isEmpty({LowercaseEntityName}List)){
+            page.setRecords(CastEnUtil.convertPojos({LowercaseEntityName}List,{EntityName}VO.class));
+        }
+        return page;
+    }
+    /**
+     *
+     *增加
+     */
+    @Override
+    @RequestMapping(value="/insert",method=RequestMethod.POST)
+    @Transactional
+    public int insert(@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO,HttpServletRequest request){
+        return {LowercaseEntityName}AL.insert(CastEnUtil.convertPojo({LowercaseEntityName}VO,{EntityName}Entity.class));
+    }
+    /**
+     *
+     *删除
+     */
+    @Override
+    @RequestMapping(value="/delete",method=RequestMethod.DELETE)
+    @Transactional
+    public int delete(@RequestBody List<{EntityName}VO> {LowercaseEntityName}List){
+        boolean b=false;
+
+        for({EntityName}VO {LowercaseEntityName}VO:{LowercaseEntityName}List){
+            b=false;
+            if(1>{LowercaseEntityName}AL.delete(CastEnUtil.convertPojo({LowercaseEntityName}VO,{EntityName}Entity.class))){
+                b=true;
+                break;
+            }
+        }
+        if(b){
+            return 1;
+        }else{
+            return -1;
+        }
+    }
+    /**
+     *
+     *更新
+     */
+    @Override
+    @RequestMapping(value="/update",method=RequestMethod.PUT)
+    @Transactional
+    public int update(@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO){
+        return {LowercaseEntityName}AL.update(CastEnUtil.convertPojo({LowercaseEntityName}VO,{EntityName}Entity.class));
+    }
+    /**
+     *
+     *查看
+     */
+    @Override
+    @RequestMapping(value="/findBySearchText",method=RequestMethod.GET)
+    @Transactional
+    public IPage<{EntityName}VO> findBySearchText(Page<{EntityName}VO> page ,@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO){
+        //VO转换成Entity
+        {EntityName}Entity {LowercaseEntityName}Entity = CastEnUtil.convertPojo({LowercaseEntityName}VO,{EntityName}Entity.class);
+        //分页查询，
+        List<{EntityName}Entity> {LowercaseEntityName}List={LowercaseEntityName}AL.findBySearchText(page,{LowercaseEntityName}Entity);
+        if(!CollectionUtils.isEmpty({LowercaseEntityName}List)){
+            page.setRecords(CastEnUtil.convertPojos({LowercaseEntityName}List,{EntityName}VO.class));
+        }
+        return page;
+    }
+    /**
+     *
+     *查看
+     */
+    @Override
+    @RequestMapping(value="/get{EntityName}",method=RequestMethod.POST)
+    @Transactional
+    public {EntityName}VO get{EntityName}(@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO){
+        return CastEnUtil.convertPojo({LowercaseEntityName}AL.get{EntityName}(CastEnUtil.convertPojo({LowercaseEntityName}VO,{EntityName}Entity.class)),{EntityName}VO.class);
+    }
+}

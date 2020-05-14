@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<div th:fragment="searchGenerator">
+<div class="group-box">
+    <div class="group-box-title">
+        <span>查询区</span>
+    </div>
+    <form id="generatorSearchForm" class="form-horizontal" method="post">
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label class="pull-right" for="tableNameSearch">表名称：</label>
+            </div>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="tableNameSearch" name="tableName" placeholder="请选择输入表名称"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="btn-toolbar">
+                <button id="resetButton" type="button" class="btn btn-default pull-right">重置</button>
+                <button id="searchButton" type="button" class="btn btn-theme pull-right">查询</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+<hr/>
+    <div >
+        <div class="btn-toolbar">
+            <button class="btn btn-primary btn-lg" type="button" data-toggle="modal" data-target="#generatorCreateModal">
+                生成代码
+            </button>
+        </div>
+    </div>
+<hr/>
+<div id="generatorGrid"></div>
+
+</div>
+</html>

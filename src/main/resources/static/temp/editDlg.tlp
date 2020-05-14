@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+
+<div th:fragment="edit{EntityName}" class="modal fade" id="{LowercaseEntityName}EditModal" role="dialog" aria=hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times:</button>
+                <h4 class="modal-title">
+                    <b>编辑</b>
+                </h4>
+            </div>
+            <div class="modal-body">
+                    <form id="{LowercaseEntityName}EditForm" method="post" class="form-horizontal">
+                        {editFieldList}
+                    </form>
+                <div class="modal-footer" id="{LowercaseEntityName}EditToolbar">
+                    <div class="btn-toolbar">
+                        <button id="{LowercaseEntityName}EditOKButton" class="btn btn-primary btn-theme" type="button">确定</button>
+                        <button type="button" class="btn" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

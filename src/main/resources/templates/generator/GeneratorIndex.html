@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head th:replace="@{base/header}::header"></head>
+<head>
+    <title>1233</title>
+    <link rel="stylesheet" th:href="@{/css/generator/generator.css}"/>
+</head>
+<body>
+<!--应用开始-->
+    <div class="container-fluid">
+        <div th:replace="@{generator/GeneratorCreateDlg}::addGenerator"></div>
+        <div th:replace="@{generator/GeneratorSearchDlg}::searchGenerator"></div>
+    </div>
+<!--应用结束-->
+    <div th:replace="@{base/footer}::footer"></div>
+<div id="vueTest">
+    <p>site ： {{site}}</p>
+    <p>message ： {{message}}</p>
+    <p>url : {{url}}</p>
+    <p>alexa : {{alexa}}</p>
+    <p>details : {{details()}}</p>
+
+</div>
+<script th:src="@{/js/generator/generator.js}" type="text/javascript" th:inline="javascript"></script>
+<script th:src="@{/js/generator/vueTest.js}" type="text/javascript" th:inline="javascript"></script>
+</body>
+</html>

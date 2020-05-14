@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<div th:fragment="search{EntityName}">
+    <div class="c-query-panel" id="{LowercaseEntityName}FilterBox" style="display:none">
+        <div class="c-group-box-title">
+            <span>查询区</span>
+        </div>
+        <form id="{LowercaseEntityName}SearchForm" class="form-horizontal" method="post">
+            {searchFieldList}
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <div class="btn-toolbar">
+                        <button id = "resetButton" type="button" class="pull-rigth btn btn-default">重置</button>
+                        <button id = "searchButton" type="button" class="pull-rigth btn btn-theme">查询</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <hr/>
+    <script id = "{LowercaseEntityName}GridToolbar" type="text/x-kendo-template">
+         <div class="btn-toolbar">
+            <button class="fa fa-download" id="{LowercaseEntityName}ExportButton"><em>下载</em></button>
+            <button class="fa fa-filter" id="{LowercaseEntityName}FilterButton"><em>筛选</em></button>
+            <button data-toggle="modal" data-target="\\#{LowercaseEntityName}DeleteModal" class="btn fa fa-trash">删除</button>
+            <button data-toggle="modal" data-target="\\#{LowercaseEntityName}EditModal" class="btn fa fa-pencil-square">编辑</button>
+            <button data-backdrop="static" data-toggle="modal" data-target="\\#{LowercaseEntityName}CreateModal" class="btn fa fa-plus">新增</button>
+         </div>
+    </script>
+    <div id="{LowercaseEntityName}Grid"></div>
+ </div>
+ </html>

@@ -1,0 +1,290 @@
+$(function(){
+    bindGrid(getMultiDataSource());
+    $("#{LowercaseEntityName}ShowModal").on("show.bs.modal",function(e){
+      var grid = $("#{LowercaseEntityName}Grid").data("kendoGrid");
+      var tr=grid.select();
+      var item=grid.dataItem(tr[0]);
+      {assignShowList}
+    });
+    //新增
+    $("#{LowercaseEntityName}CreateModal").on("show.bs.modal",function(e){
+        {resetCreateList}
+    });
+    //新增确认
+    $("#{LowercaseEntityName}CreateOKButton").click(function(event){
+        event.preventDefault();
+        $.ajax({
+            url:'{ModuleName}/insert',
+            type:"POST",
+            dataType:'json',
+            data:$("#{LowercaseEntityName}CreateForm").serialize(),
+        }).done(function(res){
+            document.getElementById("{LowercaseEntityName}CreateForm").reset();
+            $("#{LowercaseEntityName}CreateModal").modal("hide");
+            $("#{LowercaseEntityName}Grid").data("kendoGrid").dataSource.read();
+        });
+    });
+    //编辑
+    $("#{LowercaseEntityName}EditModal").on("show.bs.modal",function(e){
+        var grid = $("#{LowercaseEntityName}Grid").data("kendoGrid");
+        var tr = grid.select();
+        if(tr.length==1){
+            var item=grid.dataItem(tr[0]);
+            {assignEditList}
+        }else if(tr.length>1){
+            alert("每次只能选择一条记录");
+            return e.preventDefault();
+        }else{
+            alert("请选择一条记录");
+            return e.preventDefault();
+
+        }
+    }
+    //编辑确定
+    $("#{LowercaseEntityName}EditOKButton").click(function(e){
+        $.ajax({
+            url:'{ModuleName}/update',
+            type : 'POST',
+            dataType :  'json',
+            data:$("#{LowercaseEntityName}EditForm").serialize(),
+            success:function(data){
+                $("#{LowercaseEntityName}EditModal").modal("hide");
+                $("#{LowercaseEntityName}Grid").data("kendoGrid").dataSource.read();
+            }
+        })
+    });
+    //删除
+    $("#{LowercaseEntityName}DeleteModal").on("show.bs.modal",function(e){
+        var grid=$("#{LowercaseEntityName}Grid").data("kendoGrid");
+        var tr = grid.select();
+        if(tr.length<1){
+            alert("请选择一条记录");
+            return e.preventDefault();
+        }
+    });
+    //删除确认按钮
+    $("#{LowercaseEntityName}DeleteOKButton").click(function(e){
+        var {LowercaseEntityName}Ids = new Array();
+        var grid = $("#{LowercaseEntityName}Grid").data("kendoGrid");
+        var tr= grid.select();
+        for(var i=0;i<tr.length;i++){
+            var item = grid.dataItem(tr[i]);
+            var vo={};
+            {pkAssignList}
+            {LowercaseEntityName}Ids.push(vo);
+        }
+        $.ajax({
+            url:'{ModuleName}/delete',
+            dataType:'json',
+            type:'POST',
+            data: JSON.stringify({LowercaseEntityName}Ids),
+            success:function(data){
+                $("#{LowercaseEntityName}DeletedModal").modal("hide");
+                $("#{LowercaseEntityName}Grid").data("kendoGrid").dataSource.read();
+            }
+        });
+    });
+    //下载按钮
+    $("#{LowercaseEntityName}ExportButton").click(function(){
+        var grid = $("#{LowercaseEntityName}Grid").data("kendoGrid");
+        grid.saveAsExcel();
+    });
+    //查询区查询按钮
+    $("#{LowercaseEntityName}SearchForm").submit(function(event){
+        event.preventDefault();
+        bindGrid(getMultiDataSource());
+    });
+    //查询区重置按钮
+    $("#resetButton").click(function(e){
+        {resetSearchList}
+        $("#{LowercaseEntityName}SearchText").val("");
+        bindGrid(getMultiDataSource());
+    });
+    //筛选按钮
+    $("#{LowercaseEntityName}FilterButton").click(function(){
+        {resetSearchList}
+        if($("#{LowercaseEntityName}FilterBox").css("display")=="block"){
+            $("#{LowercaseEntityName}FilterBox").slideUp();
+        }else if($("#{LowercaseEntityName}FilterBox").css("display")=="none"){
+            $("#{LowercaseEntityName}FilterBox").slideDown();
+        }
+    });
+    $("#{LowercaseEntityName}SearchText").bind('input propertychange',function(){
+        bindGrid(getSingleDataSource());
+    });
+}
+function getMultiDataSource(){
+    var dataSource = new kendo.data.DataSource({
+        transport :{
+            read : {
+                url : '{ModuleName}/find',
+                dataType : 'json',
+                method : "GET",
+                cache : false
+            },
+            parameterMap : function(options,operation){
+                if(operation != "read" && options){
+                    return kendo.stringify(options);
+                }else{
+                    return $("#{LowercaseEntityName}SearchForm").serialize()
+                        +"&current=" + options.page
+                        +"&size=" + options.pageSize;
+                }
+            }
+        },
+        serverPaging : true,
+        pageSize : 10,
+        schema : {
+            data: function(response){
+                return response.records;
+            },
+            total : function(response){
+                return response.total;
+            }
+        }
+    });
+    return dataSource;
+}
+function getSingleDataSource(){
+    var dataSource = new kendo.data.DataSource({
+        transport :{
+            read : {
+                url : '{ModuleName}/findBySearchText',
+                dataType : 'json',
+                method : "GET",
+                cache : false
+            },
+            parameterMap : function(options,operation){
+                if(operation != "read" && options){
+                    return kendo.stringify(options);
+                }else{
+                    return $("#{LowercaseEntityName}SearchText").val()
+                        +"&current=" + options.page
+                        +"&size=" + options.pageSize;
+                }
+            }
+        },
+        serverPaging : true,
+        pageSize : 10,
+        schema : {
+            data: function(response){
+                return response.records;
+            },
+            total : function(response){
+                return response.total;
+            }
+        }
+    });
+    return dataSource;
+}
+function bindGrid(dataSource){
+    var $grid = $("#{LowercaseEntityName}Grid");
+    if($grid.data("kendoGrid")){
+        //如果已经存在kendoGrid实例，则将其销毁，重新建一个
+        $grid.data('kendoGrid').destroy();
+    }
+
+    $grid.kendoGrid({
+        toolbar : [
+            {template : kendo.template($("#{LowercaseEntityName}GridToolbar").html())},
+        ],
+        columns : [
+            {
+                title : "<input type='checkbox' class='grid_checkbox_all'/>",
+                width : 35,
+                template : "<input type = 'checkbox' class='grid_checkbox'/>"
+
+            }
+            {fieldJsonList}
+
+        ],
+        selectable : "multiple",
+        change:function(e){
+            var items = this.items();
+            for(var i=0;i<items.length;i++){
+                var $item=$(items[i]);
+                var $checkbox=$item.find(".grid_checkbox");
+                var checked=$item.hasClass("k-state-selected");
+                if(checked){
+                    $checkbox.prop("checked",true);
+                }else{
+                    $checkbox.prop("checked",false);
+                }
+            }
+            var checkedNum=0;
+            $(".grid_checkbox").each(function(){
+                if($(this).prop("checked")){
+                    checkedNum++;
+                }
+            });
+            if(checkedNum == $(".grid_checkbox").length){
+                $(".grid_checkbox_all").prop("indeterminate",false);
+                $(".grid_checkbox_all").prop("checked",true);
+            }else if(checkedNum == 0){
+                $(".grid_checkbox_all").prop("indeterminate",false);
+                $(".grid_checkbox_all").prop("checked",false);
+            }else{
+                $(".grid_checkbox_all").prop("indeterminate",true);
+            }
+        },
+        dataSource : dataSource,
+        pageable : {
+            numeric : true,
+            refresh : true,
+            pageSizes : false,
+            buttonCount : 5,
+            page : 1
+        },
+        serverPaging : true,
+        serverSorting : true,
+        //加载完成后每一行加一个双击事件
+        dataBound : function(){
+            var data = this.dataSource.data();
+            $.each(data,function(i,row){
+                $("tr[data-uid='"+row.uid + "']").dblclick(function(){
+                    $("#{LowercaseEntityName}ShowModal").modal("show");
+                });
+            });
+        }
+    });
+    $grid.on("click", ".grid_checkbox_all" , function(){
+            var checked=this.checked;
+            if(checked){
+                $grid.getKendoGrid().items().addClass("k-state_selected");
+                $(".grid_checkbox").prop("checked",true);
+            }else{
+                $grid.getKendoGrid().items().removeClass("k-state_selected");
+                $(".grid_checkbox").prop("checked",false);
+            }
+        });
+    $grid.on("click",".grid_checkbox",function(){
+        var checked=this.checked;
+        var row=$(this).closest("tr");
+        if(checked){
+            row.addClass("k-state-selected");
+        }else{
+            row.removeClass("k-state-selected");
+
+        }
+        var checkedNum=0;
+        $(".grid_checkbox").each(function(){
+            if($(this).prop("checked")){
+                checkedNum++;
+            }
+        });
+        if(checkedNum == $(".grid_checkbox").length){
+            $(".grid_checkbox_all").prop("indeterminate",false);
+            $(".grid_checkbox_all").prop("checked",true);
+        }else if(checkedNum == 0){
+            $(".grid_checkbox_all").prop("indeterminate",false);
+            $(".grid_checkbox_all").prop("checked",false);
+        }else{
+            $(".grid_checkbox_all").prop("indeterminate",true);
+        }
+    });
+
+    for(var i=0;i<grid.columns.length;i++){
+        $grid.thead.find("tr").find("th:eq("+i+")").attr("title",grid.columns[i].title);
+    }
+    return $grid.data("kendoGrid");
+}

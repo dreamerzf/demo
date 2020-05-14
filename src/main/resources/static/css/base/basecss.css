@@ -1,0 +1,99 @@
+.group-box{
+    margin-top:15px;
+    padding:5px;
+    border:1px solid #ddd;
+    height: 100px;
+    background-color:#f5f5f5!important;
+}
+.group-box .group-box-title{
+    background-color:#f5f5f5!important;
+}
+span{
+    margin-top: -5px;
+}
+.form-group label{
+    float: left;
+
+    font-size: 14px;
+    font-family: "Microsoft YaHei UI";
+
+}
+.c-query-panel{
+    margin: 0 auto;
+    width: 100%;
+    border-radius: 5px 5px 5px 5px;
+    border-style: solid;
+    border-color: #ccc
+}
+.group-box-title{
+    text-align:center;
+    width:80px;
+    margin-left:20px;
+    margin-top:-15px;
+    text-align:center;
+    display:block;
+}
+body{
+    font-family: "Microsoft YaHei UI";
+    font-size:16px;
+}
+.form-group{
+    margin-top: 10px;
+    width: 100%;
+    display: block;
+    height: 30px;
+}
+.col-sm-2{
+    width:20%;
+    float: left;
+    /*line-height: calc(1.5em + .75rem + 2px);*/
+}
+.col-sm-3{
+    width:30%;
+    float: left;
+}
+.col-sm-4{
+    width:40%;
+    float: left;
+}
+.col-sm-8{
+    width:80%;
+    float: left;
+}
+.pull-right{
+    display: block;
+    float: right;
+}
+.btn-toolbar{
+    margin-top: -10px;
+    width: 100%;
+    display: block;
+}
+.btn-toolbar .btn{
+    margin-left: 5px;
+}
+.btn{
+    display: inline-block;
+    float: right;
+    margin-bottom: 0;
+    text-align: center;
+    vertical-align: middle;
+    cursor:pointer;
+    background-image: none;
+    border:1px solid transparent;
+    white-space: nowrap;
+    font-size: 15px;
+    line-height: 15px;
+    border-radius:0;
+}
+.btn-default{
+    padding:6px 12px;
+    color:#333;
+    background-color: #fff;
+    border-color:#ccc;
+}
+.btn-theme{
+    color:#fff;
+    background-color: #0784de;
+    border-color: #494949;
+}

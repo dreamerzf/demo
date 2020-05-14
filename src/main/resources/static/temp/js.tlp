@@ -1,0 +1,383 @@
+$(document).ready(function(){
+    var http = window.location.protocol;
+    var host = window.location.host;
+    //加载页面时创建grid控件
+    window["{LowercaseEntityName}Grid"]=getGrid("{LowercaseEntityName}Grid");
+    //获取单数据源，存储在全局变量里
+    window["singDataSource"] = getSingleDataSource();
+    //获取多字段查询数据源，存储在全局变量里
+    window["multiDataSource"] = getMultiDataSource();
+
+    //加载页面时读取所有数据
+    rederGridData(window["multiDataSource"],1);
+    //查询按钮点击事件
+    $("#searchButton").click(function(e){
+        rederGridData(window["multiDataSource"],1);
+    });
+    //重置按钮
+    $("#resetButton").click(function(e){
+        {resetSearchList}
+        rederGridData(window["multiDataSource"],1);
+    });
+    //下载按钮
+    $("#{LowercaseEntityName}ExportButton").kendoButton({
+        click : function(){
+            window["{LowercaseEntityName}Grid"].saveAsExcel();
+        }
+    });
+    //去除下载按钮的k-button
+    $("#{LowercaseEntityName}ExportButton").removeClass("k-button");
+
+    //双击表格中的数据源查看详情
+    $("#{LowercaseEntityName}ShowModal").on("show.bs.modal",function(e){
+        //填充input
+        var tr=window["{LowercaseEntityName}Grid"].select();
+        var item=window["{LowercaseEntityName}Grid"].dataItem(tr[0]);
+        $.ajax({
+            url:http+"//"+host+'/demo/{ModuleName}/get{EntityName}',
+            type:"POST",
+            data: encodeURI(
+                {pkAssignShow}
+            ),
+            dataType:'json',
+            success:function(data){
+                {assignShowList}
+            },
+        });
+    });
+    //新增窗口打开时
+    $("#{LowercaseEntityName}CreateModal").on("show.bs.modal",function(e){
+        {resetCreateList}
+    });
+    //修改框打开编辑时操作
+    $("#{LowercaseEntityName}EditModal").on("show.bs.modal",function(e){
+        //填充input
+        var tr=window["{LowercaseEntityName}Grid"].select();
+        if(tr.length==1){
+            var item=window["{LowercaseEntityName}Grid"].dataItem(tr[0]);
+            $.ajax({
+                url:http+"//"+host+'/demo/{ModuleName}/get{EntityName}',
+                type:"POST",
+                data: encodeURI(
+                    {pkAssignShow}
+                ),
+                dataType:'json',
+                success:function(data){
+                    {assignEditList}
+                },
+            });
+        }else if(tr.length>1){
+            alert("每次只能选择一条记录");
+            return e.preventDefault();
+        }else{
+            alert("请选择一条记录");
+            return e.preventDefault();
+        }
+    });
+    //删除框打开时
+    $("#{LowercaseEntityName}DeleteModal").on("show.bs.modal",function(e){
+        var tr=window["{LowercaseEntityName}Grid"].select();
+        if(tr.length<1){
+            alert("请选择一条记录");
+            return e.preventDefault();
+        }
+    });
+    //新增确认按钮
+    $("#{LowercaseEntityName}CreateOKButton").click(function(event){
+        $.ajax({
+            url:http+"//"+host+'/demo/{ModuleName}/insert',
+            type:"POST",
+            dataType:'json',
+            data:encodeURI(
+                {createParaList}
+            ),
+            success:function(data){
+                $("#{LowercaseEntityName}CreateModal").modal("hide");
+                rederGridData(window["multiDataSource"],1);
+            }
+        });
+    });
+      //修改确认按钮
+    $("#{LowercaseEntityName}EditOKButton").click(function(event){
+        $.ajax({
+            url:http+"//"+host+'/demo/{ModuleName}/update',
+            type:"POST",
+            dataType:'json',
+            data:encodeURI(
+                {editParaList}
+            ),
+            success:function(data){
+                $("#{LowercaseEntityName}EditModal").modal("hide");
+                rederGridData(window["multiDataSource"],1);
+            }
+        });
+    });
+
+    $("#{LowercaseEntityName}Search").bind('input propertychange',function(){
+        rederGridData(window["singleDataSource"],1);
+    });
+
+    //删除确定按钮
+    $("#{LowercaseEntityName}DeleteOKButton").click(function(event){
+        var ids=new Array();
+        var tr=window["{LowercaseEntityName}Grid"].select();
+        for(var i=0;i<tr.length;i++){
+            var item = window["{LowercaseEntityName}Grid"].dataItem(tr[i]);
+            var vo={};
+            {plAssignList}
+            ids.push(vo);
+        }
+        $.ajax({
+            url:'{ModuleName}/delete{EntityName}s',
+            type:'POST',
+            dataType:'json',
+            data:JSON.stringify(ids),
+            success:function(data){
+                $("#{LowercaseEntityName}DeleteModal").modal('hide');
+                rederGridData(window["multiDataSource"],1);
+            }
+        });
+    });
+    $("#{LowercaseEntityName}FilterButton").click(function(){
+        {resetSearchList}
+        if($(".c-query-panel").css("display")=="block"){
+            $(".c-query-panel").slideUp();
+        }else if($(".c-query-panel").css("display")=="none"){
+            $(".c-query-panel").slideDown();
+        }
+        rederGridData(window["multiDataSource"],1);
+    });
+
+});
+function getGrid(id){
+    $("#"+id).kendoGrid({
+        excel:{
+            fileName:"{EntityDesc}表格.et",
+            filterable:true,
+            allPages:false
+        },
+        toolbar:[
+            {template:kendo.template($("#{LowercaseEntityName}GridToolbar").html())},
+            ],
+        columns:[
+            {
+                title:"<input type='checkbox' class='grid_checkbox_all'/>",
+                width:35,
+                template:"<input type='checkbox' class='grid_checkbox'/>"
+            }{fieldJsonList}
+        ],
+        change:function(e){
+            var items = this.items();
+            for(var i=0;i<items.length;i++){
+                var $item=$(items[i]);
+                var $checkbox=$item.find(".grid_checkbox");
+                var checked=$item.hasClass("k-state-selected");
+                if(checked){
+                    $checkbox.prop("checked",true);
+                }else{
+                    $checkbox.prop("checked",false);
+                }
+            }
+            var checkedNum=0;
+            $(".grid_checkbox").each(function(){
+                if($(this).prop("checked")){
+                    checkedNum++;
+                }
+            });
+            if(checkedNum == $(".grid_checkbox").length){
+                $(".grid_checkbox_all").prop("indeterminate",false);
+                $(".grid_checkbox_all").prop("checked",true);
+            }else if(checkedNum == 0){
+                $(".grid_checkbox_all").prop("indeterminate",false);
+                $(".grid_checkbox_all").prop("checked",false);
+            }else{
+                $(".grid_checkbox_all").prop("indeterminate",true);
+            }
+        },
+        selectalbe : "row",
+        resizable : true,
+        sortable : true,
+        filterable : true,
+        reorderable : true,
+        columnMenu : true,
+        pageable : {
+            numeric:true,
+            refresh:true,
+            pageSizes : [10,20,50,100,200,"ALL"],
+            buttonCount : 5,
+            page:1,
+            input:true
+        },
+        serverPaging:true,
+        serverSorting:true,
+        //加载完成每一行增加一个双击事件
+        dataBound:function(){
+            var data = this.dataSource.data();
+            $.each(data,function(i,row){
+                $("tr[data-uid='"+row.uid+"']").dblclick(function(){
+                    var td=$(this).find("td:eq(0)");
+                    var $checkedbox=td.find(".grid_checkbox:eq(0)");
+                    var checkedboxs=$(".grid_checkbox");
+                    for (var j=0;j<checkedboxs.length;j++){
+                        checkedboxs[j].checked=false;
+                        $(checkedboxs[j]).closest("tr").removeClass("k-state-selected");
+                    }
+                    $checkedbox.prop("checked",true);
+                    $(this).addClass("k-state-selected");
+
+                    $("#{LowercaseEntityName}ShowModal").modal("show");
+                });
+            });
+        }
+    });
+    $("#"+id).on("click", ".grid_checkbox_all" , function(){
+        var checked=this.checked;
+        if(checked){
+            $("#"+id).getKendoGrid().items().addClass("k-state_selected");
+            $(".grid_checkbox").prop("checked",true);
+        }else{
+            $("#"+id).getKendoGrid().items().removeClass("k-state_selected");
+            $(".grid_checkbox").prop("checked",false);
+        }
+    });
+    $("#"+id).on("click",".grid_checkbox",function(){
+        var checked=this.checked;
+        var row=$(this).closest("tr");
+        if(checked){
+            row.addClass("k-state-selected");
+        }else{
+            row.removeClass("k-state-selected");
+
+        }
+        var checkedNum=0;
+        $(".grid_checkbox").each(function(){
+            if($(this).prop("checked")){
+                checkedNum++;
+            }
+        });
+        if(checkedNum == $(".grid_checkbox").length){
+            $(".grid_checkbox_all").prop("indeterminate",false);
+            $(".grid_checkbox_all").prop("checked",true);
+        }else if(checkedNum == 0){
+            $(".grid_checkbox_all").prop("indeterminate",false);
+            $(".grid_checkbox_all").prop("checked",false);
+        }else{
+            $(".grid_checkbox_all").prop("indeterminate",true);
+        }
+    });
+    $("#"+id).on("click","tr",function(){
+        var row=$(this);
+        if(event.target!=row.find(".grid_checkbox")[0]){
+            var td=$(this).find("td:eq(0)");
+            var checked=td.find(".grid_checkbox:eq(0)")[0].checked;
+            var $checkedbox=td.find(".grid_checkbox:eq(0)");
+            if(checked){
+                $checkedbox.prop("checked",false);
+                row.removeClass("k-state-selected");
+            }else{
+                $checkedbox.prop("checked",true);
+                row.addClass("k-state-selected");
+
+            }
+            var checkedNum=0;
+            $(".grid_checkbox").each(function(){
+                if($(this).prop("checked")){
+                    checkedNum++;
+                }
+            });
+            if(checkedNum == $(".grid_checkbox").length){
+                $(".grid_checkbox_all").prop("indeterminate",false);
+                $(".grid_checkbox_all").prop("checked",true);
+            }else if(checkedNum == 0){
+                $(".grid_checkbox_all").prop("indeterminate",false);
+                $(".grid_checkbox_all").prop("checked",false);
+            }else{
+                $(".grid_checkbox_all").prop("indeterminate",true);
+            }
+        }
+    });
+    var grid=$("#"+id).data("kendoGrid");
+    for(var i=0;i<grid.columns.length;i++){
+        grid.thead.find("tr").find("th:eq("+i+")").attr("title",grid.columns[i].title);
+    }
+    return $("#"+id).data("kendoGrid");
+}
+function getMultiDataSource(){
+    var http = window.location.protocol;
+    var host = window.location.host;
+
+    var dataSource = new kendo.data.DataSource({
+        transport:{
+            read:{
+                url:http+"//"+host+"/{ProjectName}/{ModuleName}/find{EntityName}s",
+                dataType:'json',
+                method:"POST",
+                cache:false
+            },
+            parameterMap:function(options,operation){
+                //options中存储了页面分页信息
+                return encodeURI({searchParaList}+
+                "&current="+options.page+
+                "&size="+options.pageSize
+                );
+            },
+        },
+        serverPaging:true,
+        page:1,
+        pageSize:10,
+        schema:{
+            data:function(response){
+                return response.records;
+            },
+            total:function(response){
+                return response.total;
+            }
+        }
+    });
+   // dataSource.bind("error",datasource_error);
+    return dataSource;
+}
+function getSingleDataSource(){
+    var dataSource = new kendo.data.DataSource({
+        transport:{
+            read:{
+                url:"{ModuleName}/find{EntityName}BySearchText",
+                dataType:'json',
+                method:"POST",
+                cache:false
+            },
+            parameterMap:function(options,operation){
+                //options中存储了页面分页信息
+                return encodeURI("searchText="+$("#{LowercaseEntityName}Search").val()+
+                "&current="+options.page+
+                "&size="+options.pageSize
+                );
+            },
+        },
+        serverPaging:true,
+        page:1,
+        pageSize:10,
+        schema:{
+            data:function(response){
+                return response.records;
+            },
+            total:function(response){
+                return response.total;
+            }
+        }
+    });
+    //后台无响应时，前台提示
+    //dataSource.bind("error",datasource_error);
+    return dataSource;
+}
+function rederGridData(dataSource,pageNum){
+    if(pageNum!=null&&pageNum!=dataSource._page){
+        dataSource.page(pageNum);
+    }
+    window["{LowercaseEntityName}Grid"].setDataSource(dataSource);
+}
+function datasource_error(e){
+    if(e.status=="error"){
+        alert("系统后台无响应");
+    }
+}

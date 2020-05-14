@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head th:replace="@{base/header}::header"></head>
+<head>
+    <title>{EntityDesc}</title>
+    <link rel="stylesheet" th:href="@{/css/base/basecss.css}"/>
+</head>
+<body>
+<!--应用开始-->
+    <div class="app-main">
+        <div th:replace="@{{ModuleName}/{EntityName}Create}::add{EntityName}"></div>
+        <div th:replace="@{{ModuleName}/{EntityName}Delete}::delete{EntityName}"></div>
+        <div th:replace="@{{ModuleName}/{EntityName}Edit}::edit{EntityName}"></div>
+        <div th:replace="@{{ModuleName}/{EntityName}Search}::search{EntityName}"></div>
+        <div th:replace="@{{ModuleName}/{EntityName}Show}::show{EntityName}"></div>
+    </div>
+<!--应用结束-->
+    <div th:replace="@{base/footer}::footer"></div>
+
+<script th:src="@{/js/{ModuleName}/{LowercaseEntityName}.js}" type="text/javascript" th:inline="javascript"></script>
+</body>
+</html>

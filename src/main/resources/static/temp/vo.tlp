@@ -1,0 +1,20 @@
+package com.zf.{ProjectName}.{ModuleName}.service.vo;
+
+/**
+ * VO实体类
+ */
+public class {EntityName}VO{
+    private String searchText;
+     {attr_list}
+     {attr_getset_list}
+
+     /**
+      *toString方法
+      */
+      public String toString(){
+        StringBuffer sb=new StringBuffer();
+        sb.append(this.getClass().getName());
+        {attr_tostring_list}
+        return sb.toString();
+      }
+}
