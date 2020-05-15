@@ -34,10 +34,15 @@
         <div class="btn-toolbar">
             <button class="fa fa-download btn" id="addressInfoExportButton"><em>下载</em></button>
             <button class="fa fa-filter btn" id="addressInfoFilterButton"><em>筛选</em></button>
-             <button data-toggle="modal" data-target="\\#addressInfoDeleteModal" class="btn fa fa-trash">删除</button>
-             <button data-toggle="modal" data-target="\\#addressInfoEditModal" class="btn fa fa-pencil-square">编辑</button>
-             <button data-backdrop="static" data-toggle="modal" data-target="\\#addressInfoCreateModal" class="btn fa fa-plus">新增</button>
-         </div>
+            <!--
+            <button data-toggle="modal" data-target="\\#addressInfoDeleteModal" class="btn fa fa-trash"><em>删除</em></button>
+            <button type="button" data-toggle="modal" data-target="\\#addressInfoEditModal" class="btn fa fa-pencil-square"><em>编辑</em></button>
+            -->
+
+            <button id="addressDelete" class="btn fa fa-trash"><em>删除</em></button>
+            <button id="addressEdit" class="btn fa fa-pencil-square"><em>编辑</em></button>
+            <button data-backdrop="static" data-toggle="modal" data-target="\\#addressInfoCreateModal" class="btn fa fa-plus"><em>新增</em></button>
+        </div>
     </script>
     <div id="addressInfoGrid"></div>
  </div>

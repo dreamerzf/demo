@@ -50,38 +50,58 @@ $(document).ready(function(){
         {resetCreateList}
     });
     //修改框打开编辑时操作
-    $("#{LowercaseEntityName}EditModal").on("show.bs.modal",function(e){
-        //填充input
+    $("#{LowercaseEntityName}Edit").click(function(e){
         var tr=window["{LowercaseEntityName}Grid"].select();
-        if(tr.length==1){
-            var item=window["{LowercaseEntityName}Grid"].dataItem(tr[0]);
-            $.ajax({
-                url:http+"//"+host+'/demo/{ModuleName}/get{EntityName}',
-                type:"POST",
-                data: encodeURI(
-                    {pkAssignShow}
-                ),
-                dataType:'json',
-                success:function(data){
-                    {assignEditList}
-                },
-            });
-        }else if(tr.length>1){
-            alert("每次只能选择一条记录");
-            return e.preventDefault();
-        }else{
-            alert("请选择一条记录");
-            return e.preventDefault();
-        }
-    });
+                if(tr.length==1){
+                    var item=window["{LowercaseEntityName}Grid"].dataItem(tr[0]);
+                    $.ajax({
+                        url:http+"//"+host+'/demo/{ModuleName}/get{EntityName}',
+                        type:"POST",
+                        data: encodeURI(
+                            {pkAssignShow}
+                        ),
+                        dataType:'json',
+                        success:function(data){
+                            $("#{LowercaseEntityName}EditModal").modal("show");
+                            {assignEditList}
+                        },
+                    });
+                }else if(tr.length>1){
+                    $.globalMessenger().post({
+                        message: "每次只能选择一条记录",//提示信息
+                        type: 'error',//消息类型。error、info、success
+                        hideAfter: 2,//多长时间消失
+                        showCloseButton:true,//是否显示关闭按钮
+                        hideOnNavigate: true //是否隐藏导航
+                    });
+                    return e.preventDefault();
+                }else{
+                    $.globalMessenger().post({
+                        message: "请选择一条记录",//提示信息
+                        type: 'error',//消息类型。error、info、success
+                        hideAfter: 2,//多长时间消失
+                        showCloseButton:true,//是否显示关闭按钮
+                        hideOnNavigate: true //是否隐藏导航
+                    });
+                    return e.preventDefault();
+                }
+    })
     //删除框打开时
-    $("#{LowercaseEntityName}DeleteModal").on("show.bs.modal",function(e){
+    $("#{LowercaseEntityName}Delete").click(function(e){
         var tr=window["{LowercaseEntityName}Grid"].select();
         if(tr.length<1){
-            alert("请选择一条记录");
+            $.globalMessenger().post({
+                message: "请至少选择一条记录",//提示信息
+                type: 'error',//消息类型。error、info、success
+                hideAfter: 2,//多长时间消失
+                showCloseButton:true,//是否显示关闭按钮
+                hideOnNavigate: true //是否隐藏导航
+            });
             return e.preventDefault();
+        }else{
+            $("#{LowercaseEntityName}DeleteModal").modal("show");
         }
-    });
+    })
     //新增确认按钮
     $("#{LowercaseEntityName}CreateOKButton").click(function(event){
         $.ajax({
@@ -107,8 +127,20 @@ $(document).ready(function(){
                 {editParaList}
             ),
             success:function(data){
-                $("#{LowercaseEntityName}EditModal").modal("hide");
-                rederGridData(window["multiDataSource"],1);
+                if(data==1){
+
+                    $("#{LowercaseEntityName}EditModal").modal("hide");
+                    rederGridData(window["multiDataSource"],1);
+                }else{
+                    $.globalMessenger().post({
+                        message: "操作失败",//提示信息
+                        type: 'info',//消息类型。error、info、success
+                        hideAfter: 2,//多长时间消失
+                        showCloseButton:true,//是否显示关闭按钮
+                        hideOnNavigate: true //是否隐藏导航
+                    });
+                }
+
             }
         });
     });
@@ -124,7 +156,7 @@ $(document).ready(function(){
         for(var i=0;i<tr.length;i++){
             var item = window["{LowercaseEntityName}Grid"].dataItem(tr[i]);
             var vo={};
-            {plAssignList}
+            {pkAssignList}
             ids.push(vo);
         }
         $.ajax({

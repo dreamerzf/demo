@@ -56,19 +56,55 @@ $(document).ready(function(){
         $("#nCreate").val("");
 
     });
-    //修改框打开编辑时操作
-    $("#addressInfoEditModal").on("show.bs.modal",function(e){
-        //填充input
+    $("#addressEdit").click(function (e) {
         var tr=window["addressInfoGrid"].select();
-        alert(tr.length);
         if(tr.length==1){
             var item=window["addressInfoGrid"].dataItem(tr[0]);
             $.ajax({
                 url:http+"//"+host+'/demo/addressmanage/getAddressInfo',
                 type:"POST",
                 data: encodeURI(
-                    "n=" + item.n 
+                    "n=" + item.n
+                ),
+                dataType:'json',
+                success:function(data){
+                    $("#addressInfoEditModal").modal("show");
+                    $("#mEdit").val(data.m);
+                    $("#nEdit").val(data.n);
 
+                },
+            });
+        }else if(tr.length>1){
+            $.globalMessenger().post({
+                message: "每次只能选择一条记录",//提示信息
+                type: 'error',//消息类型。error、info、success
+                hideAfter: 2,//多长时间消失
+                showCloseButton:true,//是否显示关闭按钮
+                hideOnNavigate: true //是否隐藏导航
+            });
+            return e.preventDefault();
+        }else if(tr.length===0){
+            $.globalMessenger().post({
+                message: "请选择一条记录",//提示信息
+                type: 'error',//消息类型。error、info、success
+                hideAfter: 2,//多长时间消失
+                showCloseButton:true,//是否显示关闭按钮
+                hideOnNavigate: true //是否隐藏导航
+            });
+            return e.preventDefault();
+        }
+    })
+    //修改框打开编辑时操作
+   /* $("#addressInfoEditModal").on("show.bs.modal",function(e){
+        //填充input
+        var tr=window["addressInfoGrid"].select();
+        if(tr.length==1){
+            var item=window["addressInfoGrid"].dataItem(tr[0]);
+            $.ajax({
+                url:http+"//"+host+'/demo/addressmanage/getAddressInfo',
+                type:"POST",
+                data: encodeURI(
+                    "n=" + item.n
                 ),
                 dataType:'json',
                 success:function(data){
@@ -87,12 +123,27 @@ $(document).ready(function(){
                 hideOnNavigate: true //是否隐藏导航
             });
             return e.preventDefault();
-        }else{
+        }else if(tr.length===0){
+            $.globalMessenger().post({
+                message: "请选择一条记录",//提示信息
+                type: 'error',//消息类型。error、info、success
+                hideAfter: 2,//多长时间消失
+                showCloseButton:true,//是否显示关闭按钮
+                hideOnNavigate: true //是否隐藏导航
+            });
+            return e.preventDefault() ;
+        }
+    });*/
+    //删除框打开时
+    $("#addressDelete").click(function (e) {
+        var tr=window["addressInfoGrid"].select();
+        if(tr.length<1){
             alert("请选择一条记录");
             return e.preventDefault();
+        }else{
+            $("#addressInfoDeleteModal").modal("show");
         }
-    });
-    //删除框打开时
+    })
     $("#addressInfoDeleteModal").on("show.bs.modal",function(e){
         var tr=window["addressInfoGrid"].select();
         if(tr.length<1){
