@@ -352,7 +352,7 @@ public class Creater {
         StringBuffer keyList= new StringBuffer("");
         if(columnList != null){
             Column col = null;
-            keyList.append("UPPER(");
+            keyList.append("UPPER(concat(");
 
             for (int i=0;i<columnList.size();i++){
                 col=columnList.get(i);
@@ -360,17 +360,17 @@ public class Creater {
                     if(col.getFieldType().equals("String")){
                         keyList.append(col.getColumnName());
                         if(i<columnList.size()-1){
-                            keyList.append("||'||'||");
+                            keyList.append(",'||',");
                         }
                     }else{
-                        keyList.append("to_char("+col.getColumnName()+")");
+                        keyList.append("char("+col.getColumnName()+")");
                         if(i<columnList.size()-1){
-                            keyList.append("||'||'||");
+                            keyList.append(",'||',");
                         }
                     }
                 }
             }
-            keyList.append(")");
+            keyList.append("))");
         }
         String result=keyList.toString();
         return result.substring(5,result.length());
@@ -392,9 +392,9 @@ public class Creater {
                         .append(Consts.ENTER);
             }
         }
-        sb.append(Consts.TAB1).append("/**检索字段").append(Consts.ENTER)
-                .append(Consts.TAB1).append("private String searchText;")
-                .append(Consts.ENTER).append(Consts.ENTER);
+//        sb.append(Consts.TAB1).append("/**检索字段").append(Consts.ENTER)
+//                .append(Consts.TAB1).append("private String searchText;")
+//                .append(Consts.ENTER).append(Consts.ENTER);
         return sb.toString();
     }
     public String createAttrGetsetList(){
@@ -509,7 +509,7 @@ public class Creater {
                     .append(Consts.TAB6)
                     .append("<div class=\"col-sm-4\">\r\n")
                     .append(Consts.TAB7)
-                    .append("<input type=\"text\" class=\"form-control\" id=\"{1}Show\" name=\"{1}Show\" placeholder=\"请输入{0}\">\r\n")
+                    .append("<input type=\"text\" class=\"form-control\" id=\"{1}Show\" name=\"{1}Show\" readonly=\"readonly\">\r\n")
                     .append(Consts.TAB6).append("</div>\r\n")
                     .append(Consts.TAB5).append("</div>\r\n");
             for (int i=0;i<columnList.size();i++){
@@ -806,7 +806,7 @@ public class Creater {
         if(null != columnList){
             Column col=null;
             StringBuffer field = new StringBuffer(Consts.TAB3);
-            field.append("$(\"#{0}Edit\").val(data.{0});\r\n");
+            field.append("$(\"#{0}Edit\").val(data.records[0].{0});\r\n");
             for (int i = 0; i < columnList.size(); i++) {
                 col=columnList.get(i);
                 list.append(CommonUtils.format(field.toString(),col.getFieldName()));
@@ -819,7 +819,7 @@ public class Creater {
         if(null != columnList){
             Column col=null;
             StringBuffer field = new StringBuffer("");
-            field.append("$(\"#{0}Show\").val(data.{0});\r\n");
+            field.append("$(\"#{0}Show\").val(data.records[0].{0});\r\n");
             field.append(Consts.TAB3);
             for (int i = 0; i < columnList.size(); i++) {
                 col=columnList.get(i);

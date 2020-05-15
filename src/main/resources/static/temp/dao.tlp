@@ -22,7 +22,7 @@ public interface {EntityName}Dao {
 
     public int update({EntityName}Entity {LowercaseEntityName}Entity);
 
-    public List<{EntityName}Entity> findBySearchText({EntityName}Entity {LowercaseEntityName}Entity);
+    public List<{EntityName}Entity> findBySearchText(IPage<?> page,@Param("{LowercaseEntityName}"){EntityName}Entity {LowercaseEntityName}Entity);
 
     public {EntityName}Entity get{EntityName}({EntityName}Entity {LowercaseEntityName}Entity);
 

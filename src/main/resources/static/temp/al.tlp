@@ -60,7 +60,7 @@ public class {EntityName}AL {
      *return
      */
     public List<{EntityName}Entity> findBySearchText(Page<?> page ,{EntityName}Entity entity){
-        return {LowercaseEntityName}Dao.findBySearchText(entity);
+        return {LowercaseEntityName}Dao.findBySearchText(page,entity);
     }
     /**
      *获取

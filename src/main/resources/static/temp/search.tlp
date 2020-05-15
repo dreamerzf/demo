@@ -20,11 +20,13 @@
     <hr/>
     <script id = "{LowercaseEntityName}GridToolbar" type="text/x-kendo-template">
          <div class="btn-toolbar">
-            <button class="fa fa-download" id="{LowercaseEntityName}ExportButton"><em>下载</em></button>
-            <button class="fa fa-filter" id="{LowercaseEntityName}FilterButton"><em>筛选</em></button>
-            <button id="{LowercaseEntityName}Delete" class="btn fa fa-trash">删除</button>
-            <button id="{LowercaseEntityName}Edit" class="btn fa fa-pencil-square">编辑</button>
             <button data-backdrop="static" data-toggle="modal" data-target="\\#{LowercaseEntityName}CreateModal" class="btn fa fa-plus">新增</button>
+            <button id="{LowercaseEntityName}Edit" class="btn fa fa-pencil-square">编辑</button>
+            <button id="{LowercaseEntityName}Delete" class="btn fa fa-trash">删除</button>
+            <button class="btn fa fa-filter" id="{LowercaseEntityName}FilterButton"><em>筛选</em></button>
+            <button class="btn fa fa-download" id="{LowercaseEntityName}ExportButton"><em>下载</em></button>
+            <span id="faSearch" class="fa fa-search"></span>
+            <input class="inputSearch" type="text" id="{LowercaseEntityName}Search" placeholder="模糊搜索....">
          </div>
     </script>
     <div id="{LowercaseEntityName}Grid"></div>

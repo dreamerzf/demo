@@ -4,7 +4,7 @@ $(document).ready(function(){
     //加载页面时创建grid控件
     window["{LowercaseEntityName}Grid"]=getGrid("{LowercaseEntityName}Grid");
     //获取单数据源，存储在全局变量里
-    window["singDataSource"] = getSingleDataSource();
+    window["singleDataSource"] = getSingleDataSource();
     //获取多字段查询数据源，存储在全局变量里
     window["multiDataSource"] = getMultiDataSource();
 
@@ -30,18 +30,32 @@ $(document).ready(function(){
 
     //双击表格中的数据源查看详情
     $("#{LowercaseEntityName}ShowModal").on("show.bs.modal",function(e){
+        {resetCreateList}
         //填充input
         var tr=window["{LowercaseEntityName}Grid"].select();
         var item=window["{LowercaseEntityName}Grid"].dataItem(tr[0]);
         $.ajax({
-            url:http+"//"+host+'/demo/{ModuleName}/get{EntityName}',
+            url:http+"//"+host+'/{ProjectName}/{ModuleName}/get{EntityName}',
             type:"POST",
             data: encodeURI(
                 {pkAssignShow}
             ),
             dataType:'json',
             success:function(data){
-                {assignShowList}
+                if(data.success){
+                  {assignShowList}
+                }else{
+                    $.globalMessenger().post({
+                     message: data.message,//提示信息
+                     type: 'error',//消息类型。error、info、success
+                     hideAfter: 2,//多长时间消失
+                     showCloseButton:true,//是否显示关闭按钮
+                     hideOnNavigate: true //是否隐藏导航
+                    });
+                    return e.preventDefault();
+
+                }
+
             },
         });
     });
@@ -52,39 +66,50 @@ $(document).ready(function(){
     //修改框打开编辑时操作
     $("#{LowercaseEntityName}Edit").click(function(e){
         var tr=window["{LowercaseEntityName}Grid"].select();
-                if(tr.length==1){
-                    var item=window["{LowercaseEntityName}Grid"].dataItem(tr[0]);
-                    $.ajax({
-                        url:http+"//"+host+'/demo/{ModuleName}/get{EntityName}',
-                        type:"POST",
-                        data: encodeURI(
-                            {pkAssignShow}
-                        ),
-                        dataType:'json',
-                        success:function(data){
-                            $("#{LowercaseEntityName}EditModal").modal("show");
-                            {assignEditList}
-                        },
-                    });
-                }else if(tr.length>1){
-                    $.globalMessenger().post({
-                        message: "每次只能选择一条记录",//提示信息
-                        type: 'error',//消息类型。error、info、success
-                        hideAfter: 2,//多长时间消失
-                        showCloseButton:true,//是否显示关闭按钮
-                        hideOnNavigate: true //是否隐藏导航
-                    });
-                    return e.preventDefault();
-                }else{
-                    $.globalMessenger().post({
-                        message: "请选择一条记录",//提示信息
-                        type: 'error',//消息类型。error、info、success
-                        hideAfter: 2,//多长时间消失
-                        showCloseButton:true,//是否显示关闭按钮
-                        hideOnNavigate: true //是否隐藏导航
-                    });
-                    return e.preventDefault();
-                }
+        if(tr.length==1){
+            var item=window["{LowercaseEntityName}Grid"].dataItem(tr[0]);
+            $.ajax({
+                url:http+"//"+host+'/{ProjectName}/{ModuleName}/get{EntityName}',
+                type:"POST",
+                data: encodeURI(
+                    {pkAssignShow}
+                ),
+                dataType:'json',
+                success:function(data){
+                    if(data.success){
+                        $("#{LowercaseEntityName}EditModal").modal("show");
+                        {assignEditList}
+                    }else{
+                        $.globalMessenger().post({
+                            message: data.message,//提示信息
+                            type: 'error',//消息类型。error、info、success
+                            hideAfter: 2,//多长时间消失
+                            showCloseButton:true,//是否显示关闭按钮
+                            hideOnNavigate: true //是否隐藏导航
+                        });
+                        return e.preventDefault();
+                    }
+                },
+            });
+        }else if(tr.length>1){
+            $.globalMessenger().post({
+                message: "每次只能选择一条记录",//提示信息
+                type: 'error',//消息类型。error、info、success
+                hideAfter: 2,//多长时间消失
+                showCloseButton:true,//是否显示关闭按钮
+                hideOnNavigate: true //是否隐藏导航
+            });
+            return e.preventDefault();
+        }else{
+            $.globalMessenger().post({
+                message: "请选择一条记录",//提示信息
+                type: 'error',//消息类型。error、info、success
+                hideAfter: 2,//多长时间消失
+                showCloseButton:true,//是否显示关闭按钮
+                hideOnNavigate: true //是否隐藏导航
+            });
+            return e.preventDefault();
+        }
     })
     //删除框打开时
     $("#{LowercaseEntityName}Delete").click(function(e){
@@ -105,36 +130,59 @@ $(document).ready(function(){
     //新增确认按钮
     $("#{LowercaseEntityName}CreateOKButton").click(function(event){
         $.ajax({
-            url:http+"//"+host+'/demo/{ModuleName}/insert',
+            url:http+"//"+host+'/{ProjectName}/{ModuleName}/insert',
             type:"POST",
             dataType:'json',
             data:encodeURI(
                 {createParaList}
             ),
             success:function(data){
-                $("#{LowercaseEntityName}CreateModal").modal("hide");
-                rederGridData(window["multiDataSource"],1);
+                if(data.success){
+                    $.globalMessenger().post({
+                        message: data.message,//提示信息
+                        type: 'success',//消息类型。error、info、success
+                        hideAfter: 2,//多长时间消失
+                        showCloseButton:true,//是否显示关闭按钮
+                        hideOnNavigate: true //是否隐藏导航
+                    });
+                    $("#{LowercaseEntityName}CreateModal").modal("hide");
+                    rederGridData(window["multiDataSource"],1);
+                }else {
+                    $.globalMessenger().post({
+                        message: data.message,//提示信息
+                        type: 'error',//消息类型。error、info、success
+                        hideAfter: 2,//多长时间消失
+                        showCloseButton:true,//是否显示关闭按钮
+                        hideOnNavigate: true //是否隐藏导航
+                    });
+                }
             }
         });
     });
       //修改确认按钮
     $("#{LowercaseEntityName}EditOKButton").click(function(event){
         $.ajax({
-            url:http+"//"+host+'/demo/{ModuleName}/update',
-            type:"POST",
+            url:http+"//"+host+'/{ProjectName}/{ModuleName}/update',
+            type:"PUT",
             dataType:'json',
             data:encodeURI(
                 {editParaList}
             ),
             success:function(data){
-                if(data==1){
-
+                if(data.success){
+                    $.globalMessenger().post({
+                        message: data.message,//提示信息
+                        type: 'success',//消息类型。error、info、success
+                        hideAfter: 2,//多长时间消失
+                        showCloseButton:true,//是否显示关闭按钮
+                        hideOnNavigate: true //是否隐藏导航
+                    });
                     $("#{LowercaseEntityName}EditModal").modal("hide");
                     rederGridData(window["multiDataSource"],1);
                 }else{
                     $.globalMessenger().post({
-                        message: "操作失败",//提示信息
-                        type: 'info',//消息类型。error、info、success
+                        message: data.message,//提示信息
+                        type: 'error',//消息类型。error、info、success
                         hideAfter: 2,//多长时间消失
                         showCloseButton:true,//是否显示关闭按钮
                         hideOnNavigate: true //是否隐藏导航
@@ -160,13 +208,32 @@ $(document).ready(function(){
             ids.push(vo);
         }
         $.ajax({
-            url:'{ModuleName}/delete{EntityName}s',
-            type:'POST',
+            url:http+"//"+host+'/{ProjectName}/{ModuleName}/delete',
+            type:'DELETE',
             dataType:'json',
+            contentType: "application/json;charset=UTF-8",
             data:JSON.stringify(ids),
             success:function(data){
-                $("#{LowercaseEntityName}DeleteModal").modal('hide');
-                rederGridData(window["multiDataSource"],1);
+                if(data.success){
+                    $.globalMessenger().post({
+                        message: data.message,//提示信息
+                        type: 'success',//消息类型。error、info、success
+                        hideAfter: 2,//多长时间消失
+                        showCloseButton:true,//是否显示关闭按钮
+                        hideOnNavigate: true //是否隐藏导航
+                    });
+                    $("#{LowercaseEntityName}DeleteModal").modal('hide');
+                    rederGridData(window["multiDataSource"],1);
+                }else {
+                    $.globalMessenger().post({
+                        message: data.message,//提示信息
+                        type: 'error',//消息类型。error、info、success
+                        hideAfter: 2,//多长时间消失
+                        showCloseButton:true,//是否显示关闭按钮
+                        hideOnNavigate: true //是否隐藏导航
+                    });
+                }
+
             }
         });
     });
@@ -370,10 +437,12 @@ function getMultiDataSource(){
     return dataSource;
 }
 function getSingleDataSource(){
+    var http = window.location.protocol;
+    var host = window.location.host;
     var dataSource = new kendo.data.DataSource({
         transport:{
             read:{
-                url:"{ModuleName}/find{EntityName}BySearchText",
+                url:http+"//"+host+"/{ProjectName}/{ModuleName}/findBySearchText",
                 dataType:'json',
                 method:"POST",
                 cache:false

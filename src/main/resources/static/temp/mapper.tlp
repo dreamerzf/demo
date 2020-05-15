@@ -13,12 +13,12 @@
             {FieldIfList}
         </where>
     </select>
-    <select id="findBySearchText" resultMap="{LowercaseEntityName}">
+    <select id="findBySearchText" parameterType="com.zf.{ProjectName}.{ModuleName}.dao.entity.{EntityName}Entity" resultMap="{LowercaseEntityName}">
         select <include refid = "columnAll" /> from {TableName}
         <where>
             <if test="{LowercaseEntityName}.searchText !=null and {LowercaseEntityName}.searchText != ''">
                 UPPER{StringFieldJoin}
-                like '%' || UPPER(#{{LowercaseEntityName}.searcheText,jdbcType=VARCHAR}) || '%'
+                like concat('%' , UPPER(#{{LowercaseEntityName}.searchText,jdbcType=VARCHAR}) , '%')
             </if>
         </where>
     </select>

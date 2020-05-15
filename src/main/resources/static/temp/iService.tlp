@@ -3,6 +3,7 @@ package com.zf.{ProjectName}.{ModuleName}.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import com.zf.{ProjectName}.utils.BaseVO;
 import com.zf.{ProjectName}.{ModuleName}.service.vo.{EntityName}VO;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,16 +16,16 @@ public interface I{EntityName}Service {
 
     public ModelAndView page();
 
-    public IPage<{EntityName}VO> find{EntityName}s(Page<{EntityName}VO> page,{EntityName}VO {LowercaseEntityName}VO);
+    public BaseVO<{EntityName}VO> find{EntityName}s(BaseVO<{EntityName}VO> baseVO,{EntityName}VO {LowercaseEntityName}VO);
 
-    public int insert(@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO,HttpServletRequest request);
+    public BaseVO<{EntityName}VO> insert(@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO,HttpServletRequest request);
 
-    public int delete(@RequestBody List<{EntityName}VO> {LowercaseEntityName}List);
+    public BaseVO<{EntityName}VO> delete(@RequestBody List<{EntityName}VO> {LowercaseEntityName}List);
 
-    public int update(@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO);
+    public BaseVO<{EntityName}VO> update(@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO);
 
-    public IPage<{EntityName}VO> findBySearchText(Page<{EntityName}VO> page,@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO);
+    public BaseVO<{EntityName}VO> findBySearchText(BaseVO<{EntityName}VO> baseVO,@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO);
 
-    public {EntityName}VO get{EntityName}(@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO);
+    public BaseVO<{EntityName}VO> get{EntityName}(@ModelAttribute("{LowercaseEntityName}VO") {EntityName}VO {LowercaseEntityName}VO);
 
 }

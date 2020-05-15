@@ -13,7 +13,7 @@ span{
 }
 .form-group label{
     float: left;
-
+    line-height: 38px;
     font-size: 14px;
     font-family: "Microsoft YaHei UI";
 
@@ -71,6 +71,29 @@ body{
 }
 .btn-toolbar .btn{
     margin-left: 5px;
+}
+.btn-toolbar>.fa{
+    float: left;
+}
+.inputSearch{
+    display: block;
+    float: right;
+    width:15%;
+    border: 1px solid #c8c8c8;
+    border-radius: 3px;
+    padding-left: 5px;
+    text-align: initial;
+    color: #ccc;
+    font-weight: 400;
+    font-size: 1.1em;
+}
+#faSearch{
+    display: block;
+    float: right;
+    width: 30px;
+    height: 30px;
+    line-height: 35px;
+    margin-right: 30px;
 }
 .btn{
     display: inline-block;
