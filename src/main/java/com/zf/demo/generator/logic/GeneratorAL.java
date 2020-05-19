@@ -8,6 +8,7 @@ import com.zf.demo.generator.service.vo.Column;
 import com.zf.demo.generator.service.vo.GeneratorCodeVO;
 import com.zf.demo.generator.service.vo.TableVO;
 
+import com.zf.demo.utils.BaseVO;
 import com.zf.demo.utils.Creater;
 import com.zf.demo.utils.RedisUtil;
 import com.zf.demo.addressmanage.dao.entity.AddressInfoEntity;
@@ -67,8 +68,8 @@ public class GeneratorAL {
         List<TableEntity> list=generatorDao.getAllColumns(page,entity);
         return list;
     }
-    public boolean generatorCode(GeneratorCodeVO generatorCodeVO){
-        boolean b=false;
+    public BaseVO<GeneratorCodeVO> generatorCode(GeneratorCodeVO generatorCodeVO){
+        BaseVO<GeneratorCodeVO> baseVO = new BaseVO<>();
         GeneratorCodeVO codeVO=new GeneratorCodeVO();
         try{
             List<Column> list=new ArrayList<Column>();
@@ -90,11 +91,16 @@ public class GeneratorAL {
             }
             Creater creater=new Creater(codeVO,list);
             creater.createZip();
+            baseVO.setStatus("0000");
+            baseVO.setSuccess(true);
+            baseVO.setMessage("生成成功");
         }catch (Exception e){
-            b=false;
+            baseVO.setStatus("9999");
+            baseVO.setSuccess(false);
+            baseVO.setMessage("生成失败");
         }
 
-        return b;
+        return baseVO;
 
     }
 }

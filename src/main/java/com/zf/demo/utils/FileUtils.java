@@ -120,7 +120,7 @@ public class FileUtils {
         logger.debug("将要删除文件夹--->"+sPath);
 //        如果sPath不以文件分隔符结尾，自动添加文件分隔符
         if(!sPath.endsWith(File.separator)){
-            sPath=sPath+File.pathSeparator;
+//            sPath=sPath+File.pathSeparator;
         }
         File dirFile=new File(sPath);
 //        如果dir对应的文件不存在，或者不是一个目录，则退出

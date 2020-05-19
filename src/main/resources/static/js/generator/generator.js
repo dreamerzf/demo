@@ -1,5 +1,6 @@
 $(document).ready(function (){
-
+    var http = window.location.protocol;
+    var host = window.location.host;
     bindCombobox();
     var mainGrid=getGrid("generatorGrid");
     var javaGrid=getJavaGrid("generatorJavaGrid")
@@ -12,23 +13,7 @@ $(document).ready(function (){
 
     });
     $("#generatorCreateOKButton").click(function (e) {
-        // var cols=$("#generatorJavaGrid").data("kendoGrid")._data;
-        // var vo={};
-        // var ids=[];
-        // for(var i=0;i<cols.length;i++){
-        //     vo.columnComment=cols[i].columnComment;
-        //     vo.columnKey=cols[i].columnKey;
-        //     vo.columnName=cols[i].columnName;
-        //     vo.dataType=cols[i].dataType;
-        //     vo.entityName=cols[i].entityName;
-        //     vo.fieldDesc=cols[i].fieldDesc;
-        //     vo.fieldName=cols[i].fieldName;
-        //     vo.fieldType=cols[i].fieldType;
-        //     ids.push(vo);
-        // }
-        // console.info(ids);
         var colList=JSON.stringify($("#generatorJavaGrid").data("kendoGrid")._data);
-        console.info(colList);
         $.ajax({
             url: "/demo/generator/generatorCode",
             type: "POST",
@@ -42,7 +27,26 @@ $(document).ready(function (){
             ),
 
             success: function(result) {
-               console.info(result);
+               if(result.success){
+                   window.open(http+"//"+host+'/demo/generator/download?zipName='+$("#className").val());
+                   $.globalMessenger().post({
+                       message: result.message,//提示信息
+                       type: 'success',//消息类型。error、info、success
+                       hideAfter: 2,//多长时间消失
+                       showCloseButton:true,//是否显示关闭按钮
+                       hideOnNavigate: true //是否隐藏导航
+                   });
+
+                   $("#generatorCreateModal").modal("hide");
+               }else{
+                   $.globalMessenger().post({
+                       message: result.message,//提示信息
+                       type: 'error',//消息类型。error、info、success
+                       hideAfter: 2,//多长时间消失
+                       showCloseButton:true,//是否显示关闭按钮
+                       hideOnNavigate: true //是否隐藏导航
+                   });
+               }
             }
 
 

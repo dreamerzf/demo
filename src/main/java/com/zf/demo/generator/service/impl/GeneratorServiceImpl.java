@@ -7,8 +7,7 @@ import com.zf.demo.generator.logic.GeneratorAL;
 import com.zf.demo.generator.service.IGeneratorService;
 import com.zf.demo.generator.service.vo.GeneratorCodeVO;
 import com.zf.demo.generator.service.vo.TableVO;
-import com.zf.demo.utils.CastEnUtil;
-import com.zf.demo.utils.CommonUtils;
+import com.zf.demo.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,8 +75,43 @@ public class GeneratorServiceImpl implements IGeneratorService {
 
     @Override
     @RequestMapping(value = "/generatorCode")
-    public boolean generatorCode(GeneratorCodeVO generatorCodeVO) {
+    public BaseVO<GeneratorCodeVO> generatorCode(GeneratorCodeVO generatorCodeVO) {
         return generatorAL.generatorCode(generatorCodeVO);
+    }
+    @Override
+    @RequestMapping(value = "/download")
+    public void download(String zipName,HttpServletRequest request,HttpServletResponse response){
+        try{
+            response.setContentType("text/html;charset=UTF-8");
+            request.setCharacterEncoding("UTF-8");
+            BufferedInputStream bis=null;
+            BufferedOutputStream bos=null;
+            String ctxPath=PathUtils.getClassPath(Creater.class);
+
+            String downloadPath = ctxPath + "/" + zipName + ".zip";
+            long fileLength = new File(downloadPath).length();
+
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-disposition","attachment;filename=" + new String((zipName + ".zip").getBytes("utf-8"),"ISO8859-1"));
+            response.setHeader("Content-Length",String.valueOf(fileLength));
+            bis=new BufferedInputStream(new FileInputStream(downloadPath));
+            bos=new BufferedOutputStream(response.getOutputStream());
+            byte[] buff=new byte[2048];
+            int byteRead;
+            while (-1!=(byteRead =bis.read(buff,0,buff.length))){
+                bos.write(buff,0,byteRead);
+            }
+            bis.close();
+            bos.close();
+            FileUtils fu=new FileUtils();
+            fu.deleteFile(downloadPath);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     @Override
     @RequestMapping(value = "/testPost")
