@@ -437,6 +437,9 @@ function getMultiDataSource(){
                 cache:false
             },
             parameterMap:function(options,operation){
+                if(options.pageSize==undefined){
+
+                }
                 //options中存储了页面分页信息
                 return encodeURI("n=" + $("#nSearch").val() +
                     "&m=" + $("#mSearch").val()+

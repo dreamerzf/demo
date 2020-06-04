@@ -104,7 +104,11 @@ public class Test {
             e.printStackTrace();
         }
     }
-
+    @org.junit.jupiter.api.Test
+public void testFile(){
+    PathUtil pathUtil = new PathUtil();
+    pathUtil.getClassPath(Day.class);
+}
 @org.junit.jupiter.api.Test
     public void bb(){
         String str = " 1、b7380cac    2、772f0182    3、3988a6b    4、 9a9f7503      5、 cf067f09 " +
