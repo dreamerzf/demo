@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import redis.clients.jedis.JedisCluster;
 
 /**
  * Create by zengfei
@@ -18,10 +19,14 @@ public class LoginServiceImpl implements ILoginService {
 
     @Autowired
     private IndexAL indexAL;
+    @Autowired
+    JedisCluster jedisCluster;
 
     @Override
     @RequestMapping(value = "/index",method = RequestMethod.GET)
     public ModelAndView index() {
+        jedisCluster.set("aaas","五虎将之一");
+        System.out.println(jedisCluster.get("张飞"));
 
         return new ModelAndView("login/loginIndex");
     }
