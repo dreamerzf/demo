@@ -24,7 +24,7 @@ import javax.sql.DataSource;
  * Date 2019/12/9 13:54
  */
 @Configuration
-@MapperScan(basePackages = {"com.zf.demo2.**.dao"},sqlSessionFactoryRef = "sqlSessionFactory-ds2")
+@MapperScan(basePackages = {"com.zf.demo.**.oradao"},sqlSessionFactoryRef = "sqlSessionFactory-ds2")
 public class Ds2DataSourceConfig {
 
     @Profile("dev")

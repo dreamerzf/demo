@@ -1,7 +1,7 @@
-package com.zf.demo2.addressmanage.dao;
+package com.zf.demo.addressmanage.oradao;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.zf.demo2.addressmanage.dao.entity.AddressInfoEntity;
+import com.zf.demo.addressmanage.oradao.entity.AddressInfoEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;

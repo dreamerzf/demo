@@ -11,8 +11,7 @@ import com.zf.demo.generator.service.vo.TableVO;
 import com.zf.demo.utils.BaseVO;
 import com.zf.demo.utils.Creater;
 import com.zf.demo.utils.RedisUtil;
-import com.zf.demo.addressmanage.dao.entity.AddressInfoEntity;
-import com.zf.demo2.addressmanage.logic.AddressInfoAL2;
+
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;

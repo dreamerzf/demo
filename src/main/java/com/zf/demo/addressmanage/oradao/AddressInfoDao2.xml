@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zf.demo2.addressmanage.dao.AddressInfoDao2">
-    <resultMap id="addressInfo" type="com.zf.demo2.addressmanage.dao.entity.AddressInfoEntity">
+<mapper namespace="com.zf.demo.addressmanage.oradao.AddressInfoDao2">
+    <resultMap id="addressInfo" type="com.zf.demo.addressmanage.oradao.entity.AddressInfoEntity">
               <result property="m" column="M" javaType="java.lang.String" jdbcType="VARCHAR" />
         <result property="n" column="N" javaType="java.lang.Integer" jdbcType="VARCHAR" />
 
@@ -9,7 +9,7 @@
     <sql id="columnAll">
         m, n
     </sql>
-    <select id="findAddressInfos" parameterType="com.zf.demo2.addressmanage.dao.entity.AddressInfoEntity" resultMap="addressInfo" >
+    <select id="findAddressInfos" parameterType="com.zf.demo.addressmanage.oradao.entity.AddressInfoEntity" resultMap="addressInfo" >
         select <include refid = "columnAll" /> from address_info
         <where>
                         <if test="addressInfo.m != null and addressInfo.m !=''" >
@@ -30,7 +30,7 @@
             </if>
         </where>
     </select>
-    <select id="getInfo" parameterType="com.zf.demo2.addressmanage.dao.entity.AddressInfoEntity" resultMap="addressInfo" >
+    <select id="getInfo" parameterType="com.zf.demo.addressmanage.oradao.entity.AddressInfoEntity" resultMap="addressInfo" >
            select <include refid = "columnAll" /> from address_info
            <where>
                            <if test="addressInfo.m != null and addressInfo.m !=''" >
@@ -42,7 +42,7 @@
 
            </where>
     </select>
-    <select id="getAddressInfo" parameterType="com.zf.demo2.addressmanage.dao.entity.AddressInfoEntity" resultMap="addressInfo" >
+    <select id="getAddressInfo" parameterType="com.zf.demo.addressmanage.oradao.entity.AddressInfoEntity" resultMap="addressInfo" >
            select <include refid = "columnAll" /> from address_info
            <where>
                n = #{n,jdbcType=VARCHAR}
@@ -54,7 +54,7 @@
         values(#{m,jdbcType=VARCHAR},#{n,jdbcType=VARCHAR})
     </insert>
 
-    <update id="update" parameterType="com.zf.demo2.addressmanage.dao.entity.AddressInfoEntity">
+    <update id="update" parameterType="com.zf.demo.addressmanage.oradao.entity.AddressInfoEntity">
         update address_info set
                 m = #{m,jdbcType=VARCHAR},
         n = #{n,jdbcType=VARCHAR}

@@ -2,10 +2,9 @@ package com.zf.demo;
 
 
 import com.zf.demo.addressmanage.service.impl.AddressInfoServiceImpl;
-import com.zf.demo2.addressmanage.dao.AddressInfoDao2;
-import com.zf.demo2.addressmanage.dao.entity.AddressInfoEntity;
-import com.zf.demo2.addressmanage.logic.AddressInfoAL2;
-import com.zf.demo2.addressmanage.service.impl.AddressInfoService2Impl;
+import com.zf.demo.addressmanage.oradao.AddressInfoDao2;
+import com.zf.demo.addressmanage.oradao.entity.AddressInfoEntity;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -50,15 +49,6 @@ public class Test {
             }
         }
 
-    }
-    @org.junit.jupiter.api.Test
-    public void dd(){
-        AddressInfoAL2 aaa =new AddressInfoAL2();
-        AddressInfoEntity a=new AddressInfoEntity();
-        a.setN(10);
-        a.setM("aaaa");
-        int i=aaa.insert(a);
-        System.out.println(i);
     }
 
     @org.junit.jupiter.api.Test

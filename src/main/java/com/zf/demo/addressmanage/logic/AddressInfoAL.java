@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zf.demo.addressmanage.dao.AddressInfoDao;
 import com.zf.demo.addressmanage.dao.entity.AddressInfoEntity;
 
+import com.zf.demo.addressmanage.oradao.AddressInfoDao2;
+import com.zf.demo.utils.CastEnUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.xml.bind.SchemaOutputResolver;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +22,9 @@ public class AddressInfoAL {
     @Autowired
     private AddressInfoDao addressInfoDao;
 
+    @Autowired
+    private AddressInfoDao2 addressInfoDao2;
+
     /**
      *分页查询
      *@param page
@@ -26,6 +32,8 @@ public class AddressInfoAL {
      *return
      */
     public List<AddressInfoEntity> findAddressInfos(Page<?> page,AddressInfoEntity entity){
+        com.zf.demo.addressmanage.oradao.entity.AddressInfoEntity en=new com.zf.demo.addressmanage.oradao.entity.AddressInfoEntity();
+        System.out.println(addressInfoDao2.findAddressInfos(page,en));
         List<AddressInfoEntity> list=addressInfoDao.findAddressInfos(page,entity);
         return list;
     }
@@ -60,6 +68,7 @@ public class AddressInfoAL {
      *return
      */
     public List<AddressInfoEntity> findBySearchText(Page<?> page ,AddressInfoEntity entity){
+
         return addressInfoDao.findBySearchText(page,entity);
     }
     /**

@@ -17,9 +17,9 @@ public class MyInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println("执行到preHandle");
-        if (1==1){
-            response.sendRedirect(request.getContextPath()+"/login/index");
-        }
+//        if (1==1){
+//            response.sendRedirect(request.getContextPath()+"/login/index");
+//        }
         return true;
     }
 

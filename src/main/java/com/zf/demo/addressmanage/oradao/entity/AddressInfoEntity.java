@@ -1,9 +1,9 @@
-package com.zf.demo2.addressmanage.dao.entity;
+package com.zf.demo.addressmanage.oradao.entity;
 
 /**
  * VO实体类
  */
-public class AddressInfoEntity{
+public class AddressInfoEntity {
 
      private String searchText;
          /** m*/
