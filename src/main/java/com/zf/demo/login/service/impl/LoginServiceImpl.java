@@ -19,14 +19,14 @@ public class LoginServiceImpl implements ILoginService {
 
     @Autowired
     private IndexAL indexAL;
-    @Autowired
-    JedisCluster jedisCluster;
+//    @Autowired
+//    JedisCluster jedisCluster;
 
     @Override
     @RequestMapping(value = "/index",method = RequestMethod.GET)
     public ModelAndView index() {
-        jedisCluster.set("aaas","五虎将之一");
-        System.out.println(jedisCluster.get("张飞"));
+//        jedisCluster.set("aaas","五虎将之一");
+//        System.out.println(jedisCluster.get("张飞"));
 
         return new ModelAndView("login/loginIndex");
     }
