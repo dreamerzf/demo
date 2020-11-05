@@ -34,7 +34,7 @@ public class Ds2DataSourceConfig {
         return DruidDataSourceBuilder.create().build();
     }
 
-    @Primary
+//    @Primary
     @Bean(name={"sqlSessionFactory-ds2"})
     public SqlSessionFactory sqlSessionFactory(@Qualifier("ds2") DataSource dataSource) throws Exception{
 

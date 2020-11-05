@@ -30,13 +30,15 @@ public class Ds1DataSourceConfig {
 
     @Profile("dev")
     @Bean({"ds1"})
+    @Primary
     @ConfigurationProperties("spring.datasource.druid")
     public DataSource dataSourceJdbc(){
         return DruidDataSourceBuilder.create().build();
     }
 
-    @Primary
+
     @Bean(name={"sqlSessionFactory-ds1"})
+    @Primary
     public SqlSessionFactory sqlSessionFactory(@Qualifier("ds1") DataSource dataSource) throws Exception{
 
         GlobalConfig gcfg = new GlobalConfig();
