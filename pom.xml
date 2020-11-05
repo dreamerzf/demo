@@ -20,11 +20,41 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.github.kfcfans/powerjob-worker -->
+        <dependency>
+            <groupId>com.github.kfcfans</groupId>
+            <artifactId>powerjob-worker-spring-boot-starter</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+
         <!--调度-->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
             <version>2.3.0</version>
+        </dependency>
+        <!--心跳-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.7</version>
+        </dependency>
+
+        <!--JSON.toJSONString用-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.71</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
